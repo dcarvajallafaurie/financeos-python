@@ -1,5 +1,5 @@
 # ================
-# FINANCE OS v0.2
+# FINANCEAPP V1
 # ================
 
 # Funciones
@@ -78,7 +78,7 @@ def registrar_gastos(cantidad):
 
 # Registro de datos
 
-print("===== FINANCE OS =====")
+print("===== FINANCEAPP =====")
 
 cantidad_ingresos = pedir_cantidad("ingresos")
 ingresos = registrar_ingresos(cantidad_ingresos)
