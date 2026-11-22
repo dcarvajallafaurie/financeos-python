@@ -4,9 +4,28 @@
 
 # Funciones
 
+import json
+
 def calcular_total(lista):
     return sum(lista)
 
+
+def cargar_datos():
+    try:
+        with open("financeos_data.json", "r", encoding="utf-8") as archivo:
+            datos = json.load(archivo)
+            return datos
+    except FileNotFoundError:
+        return {
+            "ingresos": [],
+            "gastos": [],
+            "categorias": []
+        }
+
+def guardar_datos(datos):
+    with open("financeos_data.json", "w", encoding="utf-8") as archivo:
+        json.dump(datos, archivo, indent=4, ensure_ascii=False)
+    
 
 def pedir_cantidad(tipo):
     while True:
@@ -78,21 +97,42 @@ def registrar_gastos(cantidad):
 
 # Registro de datos
 
-print("===== FINANCEAPP =====")
+print("===== FINANCE OS =====")
+
+datos = cargar_datos()
 
 cantidad_ingresos = pedir_cantidad("ingresos")
 ingresos = registrar_ingresos(cantidad_ingresos)
+datos["ingresos"].extend(ingresos)
 
 cantidad_gastos = pedir_cantidad("gastos")
 gastos, categorias = registrar_gastos(cantidad_gastos)
+datos["gastos"].extend(gastos)
+datos["categorias"].extend(categorias)
 
+guardar_datos(datos)
 
 # Cálculos
 
-total_ingresos = calcular_total(ingresos)
-total_gastos = calcular_total(gastos)
+total_ingresos = calcular_total(datos["ingresos"])
+total_gastos = calcular_total(datos["gastos"])
 disponible = total_ingresos - total_gastos
 
+
+# Resumen
+
+print("\n===== RESUMEN FINANCIERO =====")
+print("Ingresos registrados:", datos["ingresos"])
+print("Total de ingresos: $", total_ingresos)
+
+print("\nGastos registrados:")
+for i in range(len(datos["gastos"])):
+    categoria = datos["categorias"][i].capitalize()
+    gasto = datos["gastos"][i]
+    print(f"{categoria}: ${gasto}")
+
+print("Total de gastos: $", total_gastos)
+print("Dinero disponible: $", disponible)
 
 # Resumen
 
